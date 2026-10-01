@@ -1,0 +1,23 @@
+:root{--bg:#eef2f1;--ink:#14231f;--mut:#5a6b66;--card:#fff;--line:#cfdad6;--acc:#0b6b55;--hi:#b3261e;--med:#a65f00;--low:#46606b}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1816;--ink:#e3eeea;--mut:#8fa59e;--card:#16231f;--line:#2a3d37;--acc:#4cc9a4;--hi:#ff8a80;--med:#ffb74d;--low:#90a4ae}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:2.2rem;margin:0;letter-spacing:-.02em}h2{font-size:1.1rem;margin:28px 0 8px}
+.lead{color:var(--mut);max-width:60ch}
+textarea{width:100%;min-height:180px;font:13px/1.4 Consolas,monospace;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:10px}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.btn{font:inherit;padding:8px 14px;border:1px solid var(--acc);background:var(--acc);color:#fff;border-radius:6px;cursor:pointer}
+button.alt,.btn.alt{background:transparent;color:var(--acc)}
+:focus-visible{outline:3px solid var(--med);outline-offset:2px}
+#status{color:var(--mut)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-left:6px solid;padding:12px;border-radius:6px}
+.stat b{font-size:2rem;display:block}.stat.High{border-color:var(--hi)}.stat.Medium{border-color:var(--med)}.stat.Low{border-color:var(--low)}
+.bar{display:grid;grid-template-columns:230px 1fr 40px;gap:8px;align-items:center;margin:4px 0;font-size:.9rem}
+.bar i{display:block;height:12px;background:var(--acc);border-radius:2px}.bar em{font-style:normal;color:var(--mut)}
+.wrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:.88rem}th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+td.mono{font-family:Consolas,monospace;white-space:normal;word-break:break-all;min-width:220px}
+.sev{font-weight:700}.sev.High{color:var(--hi)}.sev.Medium{color:var(--med)}.sev.Low{color:var(--low)}
+.note{font-size:.85rem;color:var(--mut);margin-top:32px}
+@media(max-width:600px){.bar{grid-template-columns:120px 1fr 30px}.stats{grid-template-columns:1fr}}

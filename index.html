@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LogSentinel: web and SSH log analyzer</title><link rel="stylesheet" href="style.css"></head>
+<body><main>
+<h1>LogSentinel</h1>
+<p class="lead">Paste an Apache/Nginx access log or an SSH auth log. LogSentinel flags injection attempts, brute-force logins, scanners and enumeration. Everything runs in your browser; no log data is uploaded.</p>
+<label for="input"><b>Log data</b></label>
+<textarea id="input" spellcheck="false" placeholder="203.0.113.7 - - [01/Oct/2026:10:00:01 +0000] &quot;GET /index.html HTTP/1.1&quot; 200 512 &quot;-&quot; &quot;Mozilla/5.0&quot;"></textarea>
+<div class="row">
+<button id="run">Analyze log</button><button id="sample" class="alt">Load sample log</button>
+<label class="btn alt" for="file">Open log file</label><input id="file" type="file" accept=".log,.txt" hidden>
+<button id="clear" class="alt">Clear</button><span id="status" role="status"></span></div>
+<section id="results" hidden>
+<h2>Summary</h2><div id="summary" class="stats"></div>
+<h2>Alerts by type</h2><div id="bars"></div>
+<h2>Alerts</h2><div class="wrap"><table><thead><tr><th>Severity</th><th>Detection</th><th>Source IP</th><th>Detail</th><th>Reference</th></tr></thead><tbody id="alerts"></tbody></table></div>
+<div class="row"><button id="export" class="alt">Export alerts as JSON</button></div>
+<h2>Most suspicious IPs</h2><div class="wrap"><table><thead><tr><th>IP</th><th>Requests</th><th>Auth failures</th><th>404s</th><th>Rule hits</th></tr></thead><tbody id="ips"></tbody></table></div>
+</section>
+<p class="note">Defensive tool. Analyze only logs from systems you own or are authorized to review.</p>
+</main>
+<script src="js/engine.js"></script><script src="js/app.js"></script></body></html>

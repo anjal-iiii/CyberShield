@@ -1,0 +1,23 @@
+const { analyze } = require('./js/engine.js'); const fs = require('fs'); let pass = 0, fail = 0;
+function t(name, ok) { console.log((ok ? 'PASS ' : 'FAIL ') + name); ok ? pass++ : fail++; }
+const A = (s) => analyze(s).alerts.map((a) => a.type);
+const line = (p, st = 200, ua = 'Mozilla/5.0', ip = '1.2.3.4') => `${ip} - - [01/Oct/2026:10:00:00 +0000] "GET ${p} HTTP/1.1" ${st} 10 "-" "${ua}"`;
+t('SQLi OR 1=1 (encoded)', A(line('/a?id=1%27%20OR%20%271%27=%271')).includes('SQLI'));
+t('SQLi UNION SELECT', A(line('/a?q=1%20UNION%20SELECT%20a,b%20FROM%20t')).includes('SQLI'));
+t('XSS script tag', A(line('/a?q=%3Cscript%3Ex')).includes('XSS'));
+t('Path traversal', A(line('/d?f=../../etc/passwd')).includes('TRAVERSAL'));
+t('Sensitive .env probe', A(line('/.env', 404)).includes('SENSITIVE'));
+t('Scanner user-agent', A(line('/', 200, 'sqlmap/1.7')).includes('SCANNER'));
+t('Brute force (5x401)', A(Array(5).fill(line('/login', 401)).join('\n')).includes('BRUTE'));
+t('No brute force at 4x401', !A(Array(4).fill(line('/login', 401)).join('\n')).includes('BRUTE'));
+t('SSH failed password x6', A(Array(6).fill('Oct 1 10:00:00 h sshd[1]: Failed password for invalid user bob from 9.9.9.9 port 22 ssh2').join('\n')).includes('BRUTE'));
+t('Enumeration (15x404)', A(Array(15).fill(line('/x', 404)).join('\n')).includes('ENUM'));
+t('Benign traffic: zero alerts', A(line('/index.html') + '\n' + line('/about?lang=en')).length === 0);
+t('Malformed lines ignored', analyze('garbage\n\n???').parsed === 0);
+t('Malformed % encoding does not crash', A(line('/a?x=%E0%A4%A')).length >= 0);
+const r = analyze(fs.readFileSync('samples/sample.log', 'utf8'));
+const types = new Set(r.alerts.map((a) => a.type));
+t('Sample log triggers all 7 detections', ['SQLI','XSS','TRAVERSAL','SENSITIVE','SCANNER','BRUTE','ENUM'].every((x) => types.has(x)));
+t('Sample: benign IPs raise no alerts', !r.alerts.some((a) => a.ip.startsWith('198.51.100.')));
+console.log(`\n${pass} passed, ${fail} failed; sample: ${r.parsed}/${r.lines} lines, ${r.alerts.length} alerts`);
+process.exit(fail ? 1 : 0);
